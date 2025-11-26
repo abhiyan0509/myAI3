@@ -159,8 +159,6 @@ export default function Chat() {
                   BITS Pilani, Mumbai
                 </span>
               </ChatHeaderBlock>
-
-              <ChatHeaderBlock className="flex-1" />
               
               <ChatHeaderBlock className="justify-center items-center">
                 <Avatar
