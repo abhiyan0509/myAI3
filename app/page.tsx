@@ -143,6 +143,21 @@ export default function Chat() {
           <div className="relative overflow-visible">
             <ChatHeader>
               <ChatHeaderBlock />
+              <ChatHeaderBlock className="justify-start items-center gap-2">
+                <Image
+                  src="/bitsom-logo.png"
+                  alt="BITSOM Logo"
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
+                <span className="text-sm font-semibold tracking-tight">
+                  BITS Pilani, Mumbai
+                </span>
+              </ChatHeaderBlock>
+
+              <ChatHeaderBlock className="flex-1" />
+              
               <ChatHeaderBlock className="justify-center items-center">
                 <Avatar
                   className="size-8 ring-1 ring-primary"
