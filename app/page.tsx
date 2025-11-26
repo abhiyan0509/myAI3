@@ -156,7 +156,7 @@ export default function Chat() {
                   className="rounded-full"
                 />
                 <span className="text-sm font-semibold tracking-tight">
-                  BITS Pilani, Mumbai
+                  BITS Pilani
                 </span>
               </ChatHeaderBlock>
               
@@ -207,7 +207,7 @@ export default function Chat() {
           <div className="bg-white/35 backdrop-blur-xl">
             <div className="w-full px-5 pt-4 pb-1 flex justify-center relative overflow-visible">
               <div className="message-fade-overlay" />
-              <div className="max-w-3xl w-full">
+              <div className="w-full">
                 <form id="chat-form" onSubmit={form.handleSubmit(onSubmit)}>
                   <FieldGroup>
                     <Controller
@@ -264,8 +264,15 @@ export default function Chat() {
               </div>
             </div>
           </div>
-          <div className="w-full px-5 py-3 items-center flex justify-center text-xs text-black">
-            © {new Date().getFullYear()} {OWNER_NAME}&nbsp;<Link href="/terms" className="underline">Terms of Use</Link>&nbsp;Powered by&nbsp;<Link href="https://ringel.ai/" className="underline">Ringel.AI</Link>
+          <div className="w-full px-5 py-3 flex items-center justify-center text-xs text-black">
+            © {new Date().getFullYear()} {OWNER_NAME}&nbsp;
+            <Link href="/terms" className="underline">
+              Terms of Use
+            </Link>
+            &nbsp;Powered by&nbsp;
+            <Link href="https://ringel.ai/" className="underline">
+              Ringel.AI
+            </Link>
           </div>
         </div>
       </main>
