@@ -141,11 +141,11 @@ export default function Chat() {
     className="relative flex h-screen w-screen items-center justify-center font-sans bg-cover bg-center bg-no-repeat"
     style={{ backgroundImage: "url('/watches-bg.jpg')" }}
   >
-  <div className="absolute inset-0 bg-black/50" />   // NEW: dark overlay
-  <main className="relative z-10 w-full max-w-5xl h-[90vh] rounded-3xl bg-white/70 backdrop-blur-md shadow-2xl overflow-hidden flex flex-col">
+  <div className="absolute inset-0 bg-black/40" />   // NEW: dark overlay
+  <main className="relative z-10 w-full max-w-4xl h-[80vh] rounded-3xl bg-white/35 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col">
 
         <div className="sticky top-0 z-20 border-b border-white/50">
-          <div className="bg-white/70 backdrop-blur-md">
+          <div className="bg-white/35 backdrop-blur-xl">
             <ChatHeader>
               <ChatHeaderBlock className="justify-start items-center gap-2">
                 <Image
@@ -204,7 +204,7 @@ export default function Chat() {
           </div>
         </div>
         <div className="sticky bottom-0 z-20 border-t border-white/50">
-          <div className="bg-white/70 backdrop-blur-md">
+          <div className="bg-white/35 backdrop-blur-xl">
             <div className="w-full px-5 pt-4 pb-1 flex justify-center relative overflow-visible">
               <div className="message-fade-overlay" />
               <div className="max-w-3xl w-full">
@@ -218,11 +218,11 @@ export default function Chat() {
                           <FieldLabel htmlFor="chat-form-message" className="sr-only">
                             Message
                           </FieldLabel>
-                          <div className="relative h-13">
+                          <div className="relative">
                             <Input
                               {...field}
                               id="chat-form-message"
-                              className="h-15 pr-15 pl-5 bg-card rounded-[20px]"
+                              className="h-14 pr-14 pl-5 bg-card rounded-[20px]"
                               placeholder="Type your message here..."
                               disabled={status === "streaming"}
                               aria-invalid={fieldState.invalid}
@@ -236,7 +236,7 @@ export default function Chat() {
                             />
                             {(status == "ready" || status == "error") && (
                               <Button
-                                className="absolute right-3 top-3 rounded-full"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full"
                                 type="submit"
                                 disabled={!field.value.trim()}
                                 size="icon"
