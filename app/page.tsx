@@ -142,7 +142,7 @@ export default function Chat() {
     style={{ backgroundImage: "url('/watches-bg.jpg')" }}
   >
   <div className="absolute inset-0 bg-black/40" />   // NEW: dark overlay
-  <main className="relative z-10 w-full max-w-2xl h-[92vh] mx-auto rounded-3xl bg-white/35 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col -translate-x-[16px]">
+  <main className="relative z-10 w-full max-w-2xl h-[92vh] mx-auto rounded-3xl bg-white/35 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col -translate-x-[40px]">
 
         <div className="sticky top-0 z-20 border-b border-white/50">
           <div className="bg-white/35 backdrop-blur-xl">
