@@ -142,7 +142,7 @@ export default function Chat() {
     style={{ backgroundImage: "url('/watches-bg.jpg')" }}
   >
   <div className="absolute inset-0 bg-black/40" />   // NEW: dark overlay
-  <main className="relative z-10 w-full max- w-2xl h-[90vh] mx-auto rounded-3xl bg-white/35 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col">
+  <main className="relative z-10 w-full max-w-2xl h-[92vh] mx-auto rounded-3xl bg-white/35 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col">
 
         <div className="sticky top-0 z-20 border-b border-white/50">
           <div className="bg-white/35 backdrop-blur-xl">
@@ -264,7 +264,7 @@ export default function Chat() {
               </div>
             </div>
           </div>
-          <div className="w-full px-5 py-3 items-center flex justify-center text-xs text-muted-foreground">
+          <div className="w-full px-5 py-3 items-center flex justify-center text-xs text-black">
             © {new Date().getFullYear()} {OWNER_NAME}&nbsp;<Link href="/terms" className="underline">Terms of Use</Link>&nbsp;Powered by&nbsp;<Link href="https://ringel.ai/" className="underline">Ringel.AI</Link>
           </div>
         </div>
