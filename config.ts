@@ -51,6 +51,10 @@ export const MODERATION_DENIAL_MESSAGE_SELF_HARM_INSTRUCTIONS = "I can't provide
 export const MODERATION_DENIAL_MESSAGE_VIOLENCE = "I can't discuss violent content. Please ask something else.";
 export const MODERATION_DENIAL_MESSAGE_VIOLENCE_GRAPHIC = "I can't discuss graphic violent content. Please ask something else.";
 export const MODERATION_DENIAL_MESSAGE_DEFAULT = "Your message violates our guidelines. I can't answer that.";
+export const MODERATION_DENIAL_MESSAGE_HARMFUL = "I’m sorry — I can’t assist with that request. However, I’d be happy to help you explore watches, comparisons, specifications, or maintenance advice.";
+export const MODERATION_DENIAL_MESSAGE_ILLEGAL = "I can’t help with activities involving replicas, counterfeits, or anything unsafe or illegal. If you'd like, I can guide you toward understanding authentic models or trusted buying options.";
+export const MODERATION_DENIAL_MESSAGE_FINANCIAL = "I can share general insights about value retention and watch trends, but I can’t provide financial or investment advice. Let me know if you’d like non-financial guidance instead.";
+export const MODERATION_DENIAL_MESSAGE_GENERAL = "I’m not able to help with that request, but I can answer watch-related questions, compare models, or offer recommendations if you’d like!";
 
 export const PINECONE_TOP_K = 40;
 export const PINECONE_INDEX_NAME = "my-ai";
