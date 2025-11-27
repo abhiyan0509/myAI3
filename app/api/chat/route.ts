@@ -126,12 +126,12 @@ export async function POST(req: Request) {
     const needsPrice = /price|cost|market|listing|resale|sell|how much|current price|value/i.test(question);
 
     if (needsPrice) {
-      // dynamic import of helper so it works for CommonJS or ESM exports
+      // dynamic import of helper — cast import to any to avoid TS property errors
       let getLivePriceNoUrl: any = null;
       try {
-        // explicit .js can help some bundlers; adjust only if your lib file location differs
-        const liveLib = await import("../../../lib/livePriceNoUrls");
-        getLivePriceNoUrl = liveLib.getLivePriceNoUrl || liveLib.default || liveLib["getLivePriceNoUrl"];
+        const liveLibAny: any = await import("../../../lib/livePriceNoUrls");
+        // Support multiple export shapes: named export, default export, or module.exports
+        getLivePriceNoUrl = liveLibAny?.getLivePriceNoUrl ?? liveLibAny?.default ?? liveLibAny?.["getLivePriceNoUrl"];
       } catch (err) {
         console.warn("Could not import livePriceNoUrls helper:", err);
       }
