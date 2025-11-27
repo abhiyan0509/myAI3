@@ -7,10 +7,9 @@ import { NextResponse } from "next/server";
  * - queries Pinecone vector index (REST)
  * - if the user asks for price, calls lib/livePriceNoUrls.getLivePriceNoUrl
  *
- * IMPORTANT:
- * - Ensure the following ENV vars are set in Vercel:
- *   OPENAI_API_KEY, PINECONE_API_KEY, PINECONE_ENVIRONMENT (or PINECONE_ENV),
- *   PINECONE_INDEX (optional, default "my-ai"), EXA_API_KEY & EXA_ENDPOINT if using Exa
+ * Required ENV in Vercel:
+ * OPENAI_API_KEY, PINECONE_API_KEY, PINECONE_ENVIRONMENT (or PINECONE_ENV),
+ * PINECONE_INDEX (optional, default "my-ai"), EXA_API_KEY & EXA_ENDPOINT if using Exa
  */
 
 // --- Environment variables (required) ---
@@ -19,7 +18,7 @@ const PINECONE_API_KEY = process.env.PINECONE_API_KEY;
 const PINECONE_ENV = process.env.PINECONE_ENVIRONMENT || process.env.PINECONE_ENV || "us-west1-gcp";
 const PINECONE_INDEX = process.env.PINECONE_INDEX || "my-ai";
 
-// Early checks: throw so build/runtime fails fast if required env missing
+// Early checks: fail fast with helpful message if required env missing
 if (!OPENAI_API_KEY) {
   throw new Error("OPENAI_API_KEY not set in environment");
 }
@@ -50,14 +49,12 @@ async function getEmbedding(text: string) {
   }
 
   const j = await res.json();
-  // defensive checks
   if (!j?.data?.[0]?.embedding) throw new Error("OpenAI returned no embedding");
   return j.data[0].embedding;
 }
 
 /** Query Pinecone vector index via REST */
 async function queryPineconeVector(embedding: number[] | Float32Array, topK = 3) {
-  // Pinecone REST URL pattern: <index>-<env>.svc.pinecone.io
   const url = `https://${PINECONE_INDEX}-${PINECONE_ENV}.svc.pinecone.io/vectors/query`;
 
   const headers = new Headers();
@@ -112,8 +109,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "question required" }, { status: 400 });
     }
 
-    // 1) Compute embedding
-    const embedding = await getEmbedding(question);
+    // 1) Compute embedding (OpenAI)
+    const embedding: any = await getEmbedding(question);
 
     // 2) Query Pinecone
     const pcResp = await queryPineconeVector(embedding as any, 3);
@@ -129,25 +126,25 @@ export async function POST(req: Request) {
     const needsPrice = /price|cost|market|listing|resale|sell|how much|current price|value/i.test(question);
 
     if (needsPrice) {
-      // dynamic import of helper so import works for CommonJS or ESM
+      // dynamic import of helper so it works for CommonJS or ESM exports
       let getLivePriceNoUrl: any = null;
       try {
+        // explicit .js can help some bundlers; adjust only if your lib file location differs
         const liveLib = await import("../../../lib/livePriceNoUrls");
-        // library might export named fn or default or module.exports
-        getLivePriceNoUrl = liveLib.getLivePriceNoUrl || liveLib.default || (liveLib && liveLib["getLivePriceNoUrl"]);
+        getLivePriceNoUrl = liveLib.getLivePriceNoUrl || liveLib.default || liveLib["getLivePriceNoUrl"];
       } catch (err) {
         console.warn("Could not import livePriceNoUrls helper:", err);
       }
 
       if (!getLivePriceNoUrl || typeof getLivePriceNoUrl !== "function") {
-        console.warn("getLivePriceNoUrl not found; returning catalog info instead");
+        console.warn("getLivePriceNoUrl not available; returning catalog info");
         return NextResponse.json({
           answer: `Live price lookup is not available. Here's catalog info:\n\n${meta.brand} ${meta.model_name} (${meta.reference_number})\n${meta.description}`,
           metadata: meta,
         });
       }
 
-      // call the helper
+      // call helper
       const live = await getLivePriceNoUrl({
         brand: meta.brand || "",
         model: meta.model_name || "",
