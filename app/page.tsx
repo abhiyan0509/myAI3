@@ -150,19 +150,23 @@ export default function Chat() {
   };
 
   useEffect(() => {
-    if (!messages || messages.length === 0) return;
-  
-    const last = messages[messages.length - 1];
-  
-    if (last.role === "assistant") {
-      const text = last.parts?.[0]?.text;
-      if (text) speak(text);
-    }
-  }, [messages]);
+  if (!messages || messages.length === 0) return;
+
+  const last = messages[messages.length - 1];
+  if (last.role !== "assistant") return;
+
+  const firstPart = last.parts?.[0];
+
+  if (firstPart && firstPart.type === "text") {
+    const text = firstPart.text as string;
+    if (text) speak(text);
+  }
+}, [messages]);
+
   
   const startListening = () => {
   const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
+    (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
   if (!SpeechRecognition) {
     alert("Speech recognition not supported in this browser.");
@@ -192,8 +196,8 @@ export default function Chat() {
     className="relative flex h-screen w-screen items-center justify-center font-sans bg-cover bg-center bg-no-repeat"
     style={{ backgroundImage: "url('/watches-bg.jpg')" }}
   >
-  <div className="absolute inset-0 bg-black/40" />   // NEW: dark overlay
-  <main className="relative z-10 w-full max-w-2xl h-[92vh] mx-auto rounded-3xl bg-white/35 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col -translate-x-[40px]">
+  <div className="absolute inset-0 bg-black/40" />   
+  <main className="relative z-10 w-full max-w-2xl h-[92vh] mx-auto rounded-3xl bg-white/35 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col -translate-x-[60px]">
 
         <div className="sticky top-0 z-20 border-b border-white/50">
           <div className="bg-white/50 backdrop-blur-xl">
@@ -279,7 +283,7 @@ export default function Chat() {
                             <Input
                               {...field}
                               id="chat-form-message"
-                              className="h-14 pr-14 pl-5 bg-card rounded-[20px]"
+                              className="h-14 pr-14 pl-10 bg-card rounded-[20px]"
                               placeholder="Type your message here..."
                               disabled={status === "streaming"}
                               aria-invalid={fieldState.invalid}
