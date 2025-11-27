@@ -147,7 +147,15 @@ export default function Chat() {
         <div className="sticky top-0 z-20 border-b border-white/50">
           <div className="bg-white/50 backdrop-blur-xl">
             <ChatHeader>
-              
+              <ChatHeaderBlock className="justify-start items-center gap-2">
+                <Image
+                  src="/bitsom-logo.png"
+                  alt="BITSOM Logo"
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
+              </ChatHeaderBlock>
               <ChatHeaderBlock className="flex-[2] justify-center items-center gap-2">
                 <Avatar
                   className="size-8 ring-1 ring-primary"
