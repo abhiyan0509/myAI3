@@ -67,6 +67,7 @@ const saveMessagesToStorage = (messages: UIMessage[], durations: Record<string, 
 
 export default function Chat() {
   const [isClient, setIsClient] = useState(false);
+  const [listening, setListening] = useState(false);
   const [durations, setDurations] = useState<Record<string, number>>({});
   const welcomeMessageShownRef = useRef<boolean>(false);
 
@@ -135,6 +136,58 @@ export default function Chat() {
     saveMessagesToStorage(newMessages, newDurations);
     toast.success("Chat cleared");
   }
+
+  const speak = (text: string) => {
+    if (!window.speechSynthesis) return;
+  
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "en-US";
+    utter.rate = 1;
+    utter.pitch = 1;
+    utter.volume = 1;
+    window.speechSynthesis.cancel(); 
+    window.speechSynthesis.speak(utter);
+  };
+
+  useEffect(() => {
+    if (!messages || messages.length === 0) return;
+  
+    const last = messages[messages.length - 1];
+  
+    if (last.role === "assistant") {
+      const text = last.parts?.[0]?.text;
+      if (text) speak(text);
+    }
+  }, [messages]);
+
+  const [listening, setListening] = useState(false);
+  
+  const startListening = () => {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert("Speech recognition not supported in this browser.");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.lang = "en-US";
+
+  recognition.start();
+  setListening(true);
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    form.setValue("message", transcript);
+    setListening(false);
+  };
+
+  recognition.onerror = () => setListening(false);
+};
+
 
   return (
   <div
@@ -215,6 +268,16 @@ export default function Chat() {
                             Message
                           </FieldLabel>
                           <div className="relative">
+                            <Button
+                              type="button"
+                              onClick={startListening}
+                              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full"
+                              size="icon"
+                              variant="outline"
+                            >
+                              🎤
+                            </Button>
+
                             <Input
                               {...field}
                               id="chat-form-message"
