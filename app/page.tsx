@@ -67,7 +67,6 @@ const saveMessagesToStorage = (messages: UIMessage[], durations: Record<string, 
 
 export default function Chat() {
   const [isClient, setIsClient] = useState(false);
-  const [listening, setListening] = useState(false);
   const [durations, setDurations] = useState<Record<string, number>>({});
   const welcomeMessageShownRef = useRef<boolean>(false);
 
@@ -137,70 +136,16 @@ export default function Chat() {
     toast.success("Chat cleared");
   }
 
-  const speak = (text: string) => {
-    if (!window.speechSynthesis) return;
-  
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "en-US";
-    utter.rate = 1;
-    utter.pitch = 1;
-    utter.volume = 1;
-    window.speechSynthesis.cancel(); 
-    window.speechSynthesis.speak(utter);
-  };
-
-  useEffect(() => {
-  if (!messages || messages.length === 0) return;
-
-  const last = messages[messages.length - 1];
-  if (last.role !== "assistant") return;
-
-  const firstPart = last.parts?.[0];
-
-  if (firstPart && firstPart.type === "text") {
-    const text = firstPart.text as string;
-    if (text) speak(text);
-  }
-}, [messages]);
-
-  
-  const startListening = () => {
-  const SpeechRecognition =
-    (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
-  if (!SpeechRecognition) {
-    alert("Speech recognition not supported in this browser.");
-    return;
-  }
-
-  const recognition = new SpeechRecognition();
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.lang = "en-US";
-
-  recognition.start();
-  setListening(true);
-
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    form.setValue("message", transcript);
-    setListening(false);
-  };
-
-  recognition.onerror = () => setListening(false);
-};
-
-
   return (
   <div
     className="relative flex h-screen w-screen items-center justify-center font-sans bg-cover bg-center bg-no-repeat"
     style={{ backgroundImage: "url('/watches-bg.jpg')" }}
   >
-  <div className="absolute inset-0 bg-black/40" />   
-  <main className="relative z-10 w-full max-w-2xl h-[92vh] mx-auto rounded-3xl bg-white/35 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col -translate-x-[60px]">
+  <div className="absolute inset-0 bg-black/40" />   // NEW: dark overlay
+  <main className="relative z-10 w-full max-w-2xl h-[92vh] mx-auto rounded-3xl bg-white/60 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col -translate-x-[60px]">
 
         <div className="sticky top-0 z-20 border-b border-white/50">
-          <div className="bg-white/50 backdrop-blur-xl">
+          <div className="bg-white/60 backdrop-blur-xl">
             <ChatHeader>
               <ChatHeaderBlock className="justify-start items-center gap-2">
                 <Image
@@ -255,7 +200,7 @@ export default function Chat() {
           </div>
         </div>
         <div className="sticky bottom-0 z-20 border-t border-white/50">
-          <div className="bg-white/35 backdrop-blur-xl">
+          <div className="bg-white/50 backdrop-blur-xl">
             <div className="w-full px-5 pt-4 pb-1 flex justify-center relative overflow-visible">
               <div className="message-fade-overlay" />
               <div className="w-full">
@@ -270,20 +215,10 @@ export default function Chat() {
                             Message
                           </FieldLabel>
                           <div className="relative">
-                            <Button
-                              type="button"
-                              onClick={startListening}
-                              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full"
-                              size="icon"
-                              variant="outline"
-                            >
-                              🎤
-                            </Button>
-
                             <Input
                               {...field}
                               id="chat-form-message"
-                              className="h-14 pr-14 pl-10 bg-card rounded-[20px]"
+                              className="h-14 pr-14 pl-5 bg-card rounded-[20px]"
                               placeholder="Type your message here..."
                               disabled={status === "streaming"}
                               aria-invalid={fieldState.invalid}
