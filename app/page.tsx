@@ -159,8 +159,6 @@ export default function Chat() {
       if (text) speak(text);
     }
   }, [messages]);
-
-  const [listening, setListening] = useState(false);
   
   const startListening = () => {
   const SpeechRecognition =
