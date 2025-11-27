@@ -145,7 +145,7 @@ export default function Chat() {
   <main className="relative z-10 w-full max-w-2xl h-[92vh] mx-auto rounded-3xl bg-white/35 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col -translate-x-[40px]">
 
         <div className="sticky top-0 z-20 border-b border-white/50">
-          <div className="bg-white/35 backdrop-blur-xl">
+          <div className="bg-white/50 backdrop-blur-xl">
             <ChatHeader>
               
               <ChatHeaderBlock className="flex-[2] justify-center items-center gap-2">
