@@ -137,13 +137,26 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex h-screen items-center justify-center font-sans dark:bg-black">
-      <main className="w-full dark:bg-black h-screen relative">
-        <div className="fixed top-0 left-0 right-0 z-50 bg-linear-to-b from-background via-background/50 to-transparent dark:bg-black overflow-visible pb-16">
-          <div className="relative overflow-visible">
+  <div
+    className="relative flex h-screen w-screen items-center justify-center font-sans bg-cover bg-center bg-no-repeat"
+    style={{ backgroundImage: "url('/watches-bg.jpg')" }}
+  >
+  <div className="absolute inset-0 bg-black/40" />   // NEW: dark overlay
+  <main className="relative z-10 w-full max-w-2xl h-[92vh] mx-auto rounded-3xl bg-white/60 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col -translate-x-[60px]">
+
+        <div className="sticky top-0 z-20 border-b border-white/50">
+          <div className="bg-white/60 backdrop-blur-xl">
             <ChatHeader>
-              <ChatHeaderBlock />
-              <ChatHeaderBlock className="justify-center items-center">
+              <ChatHeaderBlock className="justify-start items-center gap-2">
+                <Image
+                  src="/bitsom-logo.png"
+                  alt="BITSOM Logo"
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
+              </ChatHeaderBlock>
+              <ChatHeaderBlock className="flex-[2] justify-center items-center gap-2">
                 <Avatar
                   className="size-8 ring-1 ring-primary"
                 >
@@ -168,7 +181,7 @@ export default function Chat() {
             </ChatHeader>
           </div>
         </div>
-        <div className="h-screen overflow-y-auto px-5 py-4 w-full pt-[88px] pb-[150px]">
+        <div className="flex-1 overflow-y-auto px-5 py-4">
           <div className="flex flex-col items-center justify-end min-h-full">
             {isClient ? (
               <>
@@ -186,67 +199,76 @@ export default function Chat() {
             )}
           </div>
         </div>
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-linear-to-t from-background via-background/50 to-transparent dark:bg-black overflow-visible pt-13">
-          <div className="w-full px-5 pt-5 pb-1 items-center flex justify-center relative overflow-visible">
-            <div className="message-fade-overlay" />
-            <div className="max-w-3xl w-full">
-              <form id="chat-form" onSubmit={form.handleSubmit(onSubmit)}>
-                <FieldGroup>
-                  <Controller
-                    name="message"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="chat-form-message" className="sr-only">
-                          Message
-                        </FieldLabel>
-                        <div className="relative h-13">
-                          <Input
-                            {...field}
-                            id="chat-form-message"
-                            className="h-15 pr-15 pl-5 bg-card rounded-[20px]"
-                            placeholder="Type your message here..."
-                            disabled={status === "streaming"}
-                            aria-invalid={fieldState.invalid}
-                            autoComplete="off"
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter" && !e.shiftKey) {
-                                e.preventDefault();
-                                form.handleSubmit(onSubmit)();
-                              }
-                            }}
-                          />
-                          {(status == "ready" || status == "error") && (
-                            <Button
-                              className="absolute right-3 top-3 rounded-full"
-                              type="submit"
-                              disabled={!field.value.trim()}
-                              size="icon"
-                            >
-                              <ArrowUp className="size-4" />
-                            </Button>
-                          )}
-                          {(status == "streaming" || status == "submitted") && (
-                            <Button
-                              className="absolute right-2 top-2 rounded-full"
-                              size="icon"
-                              onClick={() => {
-                                stop();
+        <div className="sticky bottom-0 z-20 border-t border-white/50">
+          <div className="bg-white/50 backdrop-blur-xl">
+            <div className="w-full px-5 pt-4 pb-1 flex justify-center relative overflow-visible">
+              <div className="message-fade-overlay" />
+              <div className="w-full">
+                <form id="chat-form" onSubmit={form.handleSubmit(onSubmit)}>
+                  <FieldGroup>
+                    <Controller
+                      name="message"
+                      control={form.control}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <FieldLabel htmlFor="chat-form-message" className="sr-only">
+                            Message
+                          </FieldLabel>
+                          <div className="relative">
+                            <Input
+                              {...field}
+                              id="chat-form-message"
+                              className="h-14 pr-14 pl-5 bg-card rounded-[20px]"
+                              placeholder="Type your message here..."
+                              disabled={status === "streaming"}
+                              aria-invalid={fieldState.invalid}
+                              autoComplete="off"
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                  e.preventDefault();
+                                  form.handleSubmit(onSubmit)();
+                                }
                               }}
-                            >
-                              <Square className="size-4" />
-                            </Button>
-                          )}
-                        </div>
-                      </Field>
-                    )}
-                  />
-                </FieldGroup>
-              </form>
+                            />
+                            {(status == "ready" || status == "error") && (
+                              <Button
+                                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full"
+                                type="submit"
+                                disabled={!field.value.trim()}
+                                size="icon"
+                              >
+                                <ArrowUp className="size-4" />
+                              </Button>
+                            )}
+                            {(status == "streaming" || status == "submitted") && (
+                              <Button
+                                className="absolute right-2 top-2 rounded-full"
+                                size="icon"
+                                onClick={() => {
+                                  stop();
+                                }}
+                              >
+                                <Square className="size-4" />
+                              </Button>
+                            )}
+                          </div>
+                        </Field>
+                      )}
+                    />
+                  </FieldGroup>
+                </form>
+              </div>
             </div>
           </div>
-          <div className="w-full px-5 py-3 items-center flex justify-center text-xs text-muted-foreground">
-            © {new Date().getFullYear()} {OWNER_NAME}&nbsp;<Link href="/terms" className="underline">Terms of Use</Link>&nbsp;Powered by&nbsp;<Link href="https://ringel.ai/" className="underline">Ringel.AI</Link>
+          <div className="w-full px-5 py-3 flex items-center justify-center text-xs text-black">
+            © {new Date().getFullYear()} {OWNER_NAME}&nbsp;
+            <Link href="/terms" className="underline">
+              Terms of Use
+            </Link>
+            &nbsp;Powered by&nbsp;
+            <Link href="https://ringel.ai/" className="underline">
+              Ringel.AI
+            </Link>
           </div>
         </div>
       </main>
